@@ -32,17 +32,18 @@ typedef struct Process
 
 // Declaration of functions 
 void start();
-char menu();
-void schedule(char c_option);
+char menu(char c_menuType);
+void schedule(Process *Processes, int i_numOfProcesses);
 int getNumberOfProcesses();
 void getValuesOfProcesses(Process *Processes, int i_numOfProcesses);
+void addProcesses(Process *Processes, int i_numOfProcesses);
 char FIFO();
 char LIFO();
 char SJF();
 void clearScreen();
 void flushBuffer();
 char clearMemory();
-void showProcesses();
+void showProcesses(Process *Processes, int i_numOfProcesses);
 void exitProgram();
 
 int main(int argc, char **argv)
@@ -54,61 +55,83 @@ int main(int argc, char **argv)
 // Definition of functions
 void start()
 {
-	schedule(menu());
-}
-
-// Show the menu and return the option that has choosed
-char menu()
-{
-	char c_input = 0;
-	
-	puts("Scheduling of process and threads");
-	puts("---------------------------------");
-	puts("Choose one of the options bellow:");
-	do
-	{
-		puts("[1] FIFO");
-		puts("[2] LIFO");
-		puts("[3] SJF");
-		puts("[4] Clear memory");
-		puts("[5] Show processes/threads list");
-		puts("[0] Exit");
-		scanf("%s", &c_input);
-	}while(c_input < '0' || c_input > '5');
-	clearScreen();
-	return c_input;
-}
-
-// Receive the menu option and start the schedule 
-void schedule(char c_option)
-{
-	int i_numOfProcesses = getNumberOfProcesses();
-    Process *Processes = malloc(sizeof(Process) * i_numOfProcesses);
-	
-	getValuesOfProcesses(Processes, i_numOfProcesses);
-	
-	
-	switch(c_option)
-	{
+	//~ int i_numOfProcesses = 0;
+    //~ Process *Processes = NULL;
+    
+    //~ i_numOfProcesses = getNumberOfProcesses();
+	//~ Processes = malloc(sizeof(Process) * i_numOfProcesses);
+	//~ getValuesOfProcesses(Processes, i_numOfProcesses);
+    
+    
+    switch(menu(0))
+    {
 		case '1':
-			//FIFO();
+			//addProcesses(Processes, i_numOfProcesses);
 			break;
 		case '2':
-			//LIFO();
+			//schedule(Processes, i_numOfProcesses);
 			break;
 		case '3':
-			//SJF();
-			break;
-		case '4':
 			//clearMemory();
 			break;
-		case '5':
-			//showProcesses();
+		case '4':
+			//showProcesses(Processes, i_numOfProcesses);
 			break;
 		case '0':
 			exitProgram();
 			break;
 	}
+		
+}
+
+// Show the menu and return the option that has choosed
+char menu(char c_menuType)
+{
+	char c_input = 0;
+	
+	if(c_menuType == 0)
+	{
+		puts("Scheduling of process and threads");
+		puts("---------------------------------");
+		puts("Choose one of the options bellow:");
+		do
+		{
+			puts("[1] Add processes/threads");
+			puts("[2] Schedule");
+			puts("[3] Clear memory");
+			puts("[4] Show processes/threads list");
+			puts("[0] Exit");
+			scanf("%s", &c_input);
+		}while(c_input < '0' || c_input > '5');
+		clearScreen();
+		
+	}
+	else if(c_menuType == 1)
+	{
+		puts("---------------------------------");
+		puts("Choose one of the algorithms bellow:");
+		do
+		{
+			puts("[F] First In First Out (FIFO)");
+			puts("[L] Last In First Out  (LIFO)");
+			puts("[S] Shortest Job First  (SJF)");
+			puts("[0] Back");
+			scanf("%s", &c_input);
+		}while(c_input != '0' || c_input != 'F' || 
+	           c_input != 'L' || c_input != 'S');
+		clearScreen();
+		
+	}
+	return c_input;
+}
+
+
+// Receive the menu option and start the schedule 
+void schedule(Process *Processes, int i_numOfProcesses)
+{
+	
+	
+	
 }
 
 // Get and return the number of processes to a pointer
@@ -134,9 +157,9 @@ void getValuesOfProcesses(Process *Processes, int i_numOfProcesses)
 		puts("---------------------");
 		printf("Process/Thread %d:\n", uc_count+1);
 		printf("\tStart: ");
-		scanf("%d", Processes[uc_count]->i_start);
+		scanf("%d", &(Processes[uc_count].i_start));
 		printf("\tDuration: ");
-		scanf("%d", Processes[uc_count++].i_duration);
+		scanf("%d", &(Processes[uc_count++].i_duration));
 	}
 	
 }	
@@ -185,7 +208,21 @@ void flushBuffer(char *c_typeBuffer)
 
 }
 
+// Show all the processes values saved on the memory
+void showProcesses(Process *Processes, int i_numOfProcesses)
+{
+	int i_count = 0;
+	puts("\nShowing the processes/threads:");
+	while(i_count < i_numOfProcesses)
+	{
+		puts("---------------------");
+		printf("Process/Thread %d:\n", i_count+1);
+		printf("\tStart: %d\n", Processes[i_count].i_start);		
+		printf("\tDuration: %d\n", Processes[i_count++].i_duration);
+	}
 
+
+}
 
 // Exit the program
 void exitProgram()

@@ -19,7 +19,7 @@
 	#define OS "windows"
 #endif
 
-#define MIN_NUMBER_OF_PROCESSES 2
+#define MIN_NUMBER_OF_PROCESSES 1
 #define MAX_NUMBER_OF_PROCESSES 3
 
 // Type definitions
@@ -36,7 +36,7 @@ char menu(char c_menuType);
 void schedule(Process *Processes, int i_numOfProcesses);
 int getNumberOfProcesses();
 void getValuesOfProcesses(Process *Processes, int i_numOfProcesses);
-void addProcesses(Process *Processes, int i_numOfProcesses);
+void addProcesses(Process *Processes, int *i_numOfProcesses);
 char FIFO();
 char LIFO();
 char SJF();
@@ -55,33 +55,33 @@ int main(int argc, char **argv)
 // Definition of functions
 void start()
 {
-	//~ int i_numOfProcesses = 0;
-    //~ Process *Processes = NULL;
-    
-    //~ i_numOfProcesses = getNumberOfProcesses();
-	//~ Processes = malloc(sizeof(Process) * i_numOfProcesses);
-	//~ getValuesOfProcesses(Processes, i_numOfProcesses);
-    
-    
-    switch(menu(0))
+	int i_numOfProcesses = 0;
+    char c_menuOption = 0;
+    Process *Processes = NULL;
+    do
     {
-		case '1':
-			//addProcesses(Processes, i_numOfProcesses);
-			break;
-		case '2':
-			//schedule(Processes, i_numOfProcesses);
-			break;
-		case '3':
-			//clearMemory();
-			break;
-		case '4':
-			//showProcesses(Processes, i_numOfProcesses);
-			break;
-		case '0':
-			exitProgram();
-			break;
-	}
-		
+		c_menuOption = menu(0);
+    
+   
+		switch(c_menuOption)
+		{
+			case '1':
+				addProcesses(Processes, &i_numOfProcesses);
+				break;
+			case '2':
+				//schedule(Processes, i_numOfProcesses);
+				break;
+			case '3':
+				//clearMemory();
+				break;
+			case '4':
+				showProcesses(Processes, i_numOfProcesses);
+				break;
+			case '0':
+				exitProgram();
+				break;
+		}
+	}while(c_menuOption != '0');
 }
 
 // Show the menu and return the option that has choosed
@@ -223,6 +223,17 @@ void showProcesses(Process *Processes, int i_numOfProcesses)
 
 
 }
+
+void addProcesses(Process *Processes, int *i_numOfProcesses)
+{
+	*i_numOfProcesses = getNumberOfProcesses();
+	Processes = malloc(sizeof(Process)*(*i_numOfProcesses));
+	getValuesOfProcesses(Processes, *i_numOfProcesses);
+	printf("\nNumber of processes susccessfuly added: %d\n\n", *i_numOfProcesses);
+	sleep(3);
+	clearScreen();
+}
+
 
 // Exit the program
 void exitProgram()
